@@ -14,7 +14,7 @@ R__LOAD_LIBRARY(particle_cxx.so)
 
 void test()
 {
-    TFile *file = new TFile("file.root","RECREATE");
+    TFile *file = new TFile("histograms.root","RECREATE");
 
     Particle::AddParticleType("pi+", 0.13957, 1, 0);
     Particle::AddParticleType("pi-", 0.13957, -1, 0);
@@ -27,7 +27,7 @@ void test()
     TH1F *h1 = new TH1F ("h1", "Occurencies", 7, 0, 7); 
     TH1F *h2 = new TH1F ("h2", "Azimutal Angle", 100, 0, TMath::TwoPi());
     TH1F *h3 = new TH1F ("h3", "Polar Angle", 100, 0, TMath::Pi());
-    TH1F *h4 = new TH1F ("h4", "Momentum", 1E5, 0, 10);
+    TH1F *h4 = new TH1F ("h4", "Momentum", 1E4, 0, 10);
     TH1F *h5 = new TH1F ("h5", "Transverse Momentum", 1E3, 0, 5);
     TH1F *h6 = new TH1F ("h6", "Energy", 1E3, 0, 10);
     TH1F *h7 = new TH1F ("h7", "Invariant Mass (General)", 1E3, 0, 2.5); 
@@ -64,7 +64,7 @@ void test()
                 particella[j].SetIndex(6);
                 particella[j].Decay2body(particella[k], particella[k + 1]);
                 double uni = gRandom->Uniform();
-                if (uni <= 0.5) {
+                if (uni < 0.5) {
                     particella[k].SetIndex(0); 
                     particella[k + 1].SetIndex(3);
                 } else {
@@ -87,24 +87,19 @@ void test()
         } 
         for (int h = 0;  h < k; ++h)
         {
-          for (int l = 0; l < k; ++l)
-          {
-              if (l == h) {
-                  continue;
-              } else {
-                h7 -> Fill(particella[h].InvMass(particella[l]));
-                if (particella[h].GetCharge() * particella[l].GetCharge() == -1) {
-                    h8 -> Fill(particella[h].InvMass(particella[l]));
-                } else if (particella[h].GetCharge() * particella[l].GetCharge() == 1)
-                {
-                    h9 -> Fill(particella[h].InvMass(particella[l]));
-                }
-                if ((particella[h].GetName() == pi_plus && particella[l].GetName() == K_minus) || (particella[h].GetName() == pi_minus && particella[l].GetName() == K_minus)) {
-                    h10 -> Fill(particella[h].InvMass(particella[l]));
-                } else if ((particella[h].GetName() == pi_plus && particella[l].GetName() == K_plus) || (particella[h].GetName() == pi_minus && particella[l].GetName() == K_minus)) {
-                    h11 -> Fill(particella[h].InvMass(particella[l]));
-                }
-              }
+          for (int l =  h + 1; l < k; ++l){
+            h7 -> Fill(particella[h].InvMass(particella[l]));
+            if (particella[h].GetCharge() * particella[l].GetCharge() == -1) {
+                h8 -> Fill(particella[h].InvMass(particella[l]));
+            } else if (particella[h].GetCharge() * particella[l].GetCharge() == 1)
+            {
+                h9 -> Fill(particella[h].InvMass(particella[l]));
+            }
+            if ((particella[h].GetName() == pi_plus && particella[l].GetName() == K_minus) || (particella[h].GetName() == pi_minus && particella[l].GetName() == K_minus)) {
+                h10 -> Fill(particella[h].InvMass(particella[l]));
+            } else if ((particella[h].GetName() == pi_plus && particella[l].GetName() == K_plus) || (particella[h].GetName() == pi_minus && particella[l].GetName() == K_minus)) {
+                h11 -> Fill(particella[h].InvMass(particella[l]));
+            }
           }
         }
     }
