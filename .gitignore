@@ -21,3 +21,6 @@
 
 *extra.cxx
 
+#BINARY
+
+*.out

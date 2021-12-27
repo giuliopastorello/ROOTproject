@@ -95,7 +95,7 @@ int Particle::GetIndex() const {return fIndex;}
 
 double Particle::GetEnergy () const {
   double m = Particle::GetMass();
-  double p = sqrt(fP_x * fP_x + fP_x * fP_y + fP_z * fP_z);
+  double p = sqrt(fP_x * fP_x + fP_y * fP_y + fP_z * fP_z);
   return sqrt(m * m + p * p);
 }
 //Invariant Mass
