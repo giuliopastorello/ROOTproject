@@ -1,6 +1,5 @@
-
-.DS_Store
-.so
-.d
-.pcm
+*.DS_Store
+*.so
+*.d
+*.pcm
 
