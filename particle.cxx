@@ -100,9 +100,11 @@ double Particle::GetEnergy () const {
 }
 //Invariant Mass
 double Particle::InvMass(Particle &p) const {
-  double p1 = sqrt(fP_x * fP_x + fP_y * fP_y + fP_z * fP_z);
-  double p2 = sqrt(p.GetPx() * p.GetPx() + p.GetPy() * p.GetPy() + p.GetPz() * p.GetPz());
-  return sqrt(pow(GetEnergy() + p.GetEnergy(), 2) - pow(p1 + p2, 2));
+  double px = fP_x + p.GetPx();
+  double py = fP_y + p.GetPy();
+  double pz = fP_z + p.GetPz();
+  double psumsquared = px * px + py * py + pz * pz;
+  return sqrt(pow(GetEnergy() + p.GetEnergy(), 2.0) - psumsquared);
 }
 //PART TWO:2 new methods
 //Decayment into Two "Daughter" Particles

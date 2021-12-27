@@ -30,12 +30,12 @@ void test()
     TH1F *h4 = new TH1F ("h4", "Momentum", 1E5, 0, 10);
     TH1F *h5 = new TH1F ("h5", "Transverse Momentum", 1E3, 0, 5);
     TH1F *h6 = new TH1F ("h6", "Energy", 1E3, 0, 10);
-    TH1F *h7 = new TH1F ("h7", "Invariant Mass (General)", 1E3, 0, 15); 
-    TH1F *h8 = new TH1F ("h8", "Invariant Mass Opposite Charges", 1E3, 0, 15);
-    TH1F *h9 = new TH1F ("h9", "Invariant Mass Same Charges", 1E3, 0, 15);
-    TH1F *h10 = new TH1F ("h10", "Invariant Mass pi & k Opposite Charges", 1E3, 0, 15);
-    TH1F *h11 = new TH1F ("h11", "Invariant Mass pi & k Same Charges", 1E3, 0, 15);
-    TH1F *h12 = new TH1F ("h12", "Invariant Mass Decayment Particles",1E3, 0, 15);
+    TH1F *h7 = new TH1F ("h7", "Invariant Mass (General)", 1E3, 0, 2.5); 
+    TH1F *h8 = new TH1F ("h8", "Invariant Mass Opposite Charges", 1E3, 0, 2.5);
+    TH1F *h9 = new TH1F ("h9", "Invariant Mass Same Charges", 1E3, 0, 2.5);
+    TH1F *h10 = new TH1F ("h10", "Invariant Mass pi & k Opposite Charges", 1E3, 0, 2.5);
+    TH1F *h11 = new TH1F ("h11", "Invariant Mass pi & k Same Charges", 1E3, 0, 2.5);
+    TH1F *h12 = new TH1F ("h12", "Invariant Mass Decayment Particles",1E3, 0, 2);
 
     const char* pi_plus = "pi+";
     const char* pi_minus = "pi-";
@@ -200,5 +200,4 @@ void test()
     h12 ->Write(); //scrivere su file ROOT
     std::cout << "h12) Mean = " << h12->GetMean() <<  " +/- " << h12-> GetRMS() << '\n';
     file -> Close();
-    std::cout << "$W@G" << '\n';
 }   
