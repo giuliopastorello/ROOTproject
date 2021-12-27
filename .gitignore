@@ -1,7 +1,23 @@
+#MAC FILES
+
 *.DS_Store
+
+
+#LIBRARIES AND BUILD FILES
+
 *.so
 *.d
 *.pcm
+
+#INSTRUCTION PDFs SUBDIR
+
 **/instructions
 
+#TEST FILE
+
+*minimal.cxx
+
+#DECAY2BODY EXTRA CODE
+
+*extra.cxx
 
