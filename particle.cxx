@@ -102,7 +102,7 @@ double Particle::GetEnergy () const {
 double Particle::InvMass(Particle &p) const {
   double p1 = sqrt(fP_x * fP_x + fP_y * fP_y + fP_z * fP_z);
   double p2 = sqrt(p.GetPx() * p.GetPx() + p.GetPy() * p.GetPy() + p.GetPz() * p.GetPz());
-  return sqrt(pow(GetEnergy() + p.GetEnergy(), 2) + pow(p1 + p2, 2));
+  return sqrt(pow(GetEnergy() + p.GetEnergy(), 2) - pow(p1 + p2, 2));
 }
 //PART TWO:2 new methods
 //Decayment into Two "Daughter" Particles
