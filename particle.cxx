@@ -1,5 +1,3 @@
-#include "particletype.h"
-#include "resonancetype.h"
 #include "particle.h"
 #include <cstdlib>
 #include <iostream>
@@ -56,7 +54,7 @@ void Particle::Print1() {
     fParticleType[i]->Print();
   }
 }
-//Prind Index, Name, Momentum COmponents
+//Print Index, Name, Momentum COmponents
 void Particle::Print2() {
   std::cout << "Index: " << fIndex << '\n';
   std::cout << "Name: " << fParticleType[fIndex]->GetName() << '\n';
@@ -108,59 +106,60 @@ double Particle::InvMass(Particle &p) const {
 }
 //PART TWO:2 new methods
 //Decayment into Two "Daughter" Particles
-int Particle::Decay2body(Particle &dau1,Particle &dau2) const {
-  if(GetMass() == 0.0){
+int Particle::Decay2body(Particle &dau1, Particle &dau2) const
+{
+  if (GetMass() == 0.0)
+  {
     printf("Decayment cannot be preformed if mass is zero\n");
     return 1;
   }
-  
+
   double massMot = GetMass();
   double massDau1 = dau1.GetMass();
   double massDau2 = dau2.GetMass();
 
-  if(fIndex > -1){ // add width effect
+  if (fIndex > -1)
+  {
+    float x1, x2, w, y1 /*, y2*/;
 
-    // gaussian random numbers
-
-    float x1, x2, w, y1, y2;
-    
-    double invnum = 1./RAND_MAX;
-    do {
-      x1 = 2.0 * rand()*invnum - 1.0;
-      x2 = 2.0 * rand()*invnum - 1.0;
+    double invnum = 1. / RAND_MAX;
+    do
+    {
+      x1 = 2.0 * rand() * invnum - 1.0;
+      x2 = 2.0 * rand() * invnum - 1.0;
       w = x1 * x1 + x2 * x2;
-    } while ( w >= 1.0 );
-    
-    w = sqrt( (-2.0 * log( w ) ) / w );
+    } while (w >= 1.0);
+
+    w = sqrt((-2.0 * log(w)) / w);
     y1 = x1 * w;
-    y2 = x2 * w;
+    // y2 = x2 * w;
 
     massMot += fParticleType[fIndex]->GetWidth() * y1;
-
   }
 
-  if(massMot < massDau1 + massDau2){
+  if (massMot < massDau1 + massDau2)
+  {
     printf("Decayment cannot be preformed because mass is too low in this channel\n");
     return 2;
   }
-  
-  double pout = sqrt((massMot*massMot - (massDau1+massDau2)*(massDau1+massDau2))*(massMot*massMot - (massDau1-massDau2)*(massDau1-massDau2)))/massMot*0.5;
 
-  double norm = 2*M_PI/RAND_MAX;
+  double pout = sqrt((massMot * massMot - (massDau1 + massDau2) * (massDau1 + massDau2)) * (massMot * massMot - (massDau1 - massDau2) * (massDau1 - massDau2))) / massMot * 0.5;
 
-  double phi = rand()*norm;
-  double theta = rand()*norm*0.5 - M_PI/2.;
-  dau1.SetP(pout*sin(theta)*cos(phi),pout*sin(theta)*sin(phi),pout*cos(theta));
-  dau2.SetP(-pout*sin(theta)*cos(phi),-pout*sin(theta)*sin(phi),-pout*cos(theta));
+  double norm = 2 * M_PI / RAND_MAX;
 
-  double energy = sqrt(fP_x*fP_x + fP_y*fP_y + fP_z*fP_z + massMot*massMot);
+  double phi = rand() * norm;
+  double theta = rand() * norm * 0.5 - M_PI / 2.;
+  dau1.SetP(pout * sin(theta) * cos(phi), pout * sin(theta) * sin(phi), pout * cos(theta));
+  dau2.SetP(-pout * sin(theta) * cos(phi), -pout * sin(theta) * sin(phi), -pout * cos(theta));
 
-  double bx = fP_x/energy;
-  double by = fP_y/energy;
-  double bz = fP_z/energy;
+  double energy = GetEnergy();
 
-  dau1.Boost(bx,by,bz);
-  dau2.Boost(bx,by,bz);
+  double bx = GetPx() / energy;
+  double by = GetPy() / energy;
+  double bz = GetPz() / energy;
+
+  dau1.Boost(bx, by, bz);
+  dau2.Boost(bx, by, bz);
 
   return 0;
 }
@@ -171,12 +170,12 @@ void Particle::Boost(double bx, double by, double bz)
   double energy = GetEnergy();
 
   //Boost this Lorentz vector
-  double b2 = bx*bx + by*by + bz*bz;
+  double b2 = bx * bx + by * by + bz * bz;
   double gamma = 1.0 / sqrt(1.0 - b2);
-  double bp = bx*fP_x + by*fP_y + bz*fP_z;
+  double bp = bx * fP_x + by * fP_y + bz * fP_z;
   double gamma2 = b2 > 0 ? (gamma - 1.0)/b2 : 0.0;
 
-  fP_x += gamma2*bp*bx + gamma*bx*energy;
-  fP_y += gamma2*bp*by + gamma*by*energy;
-  fP_z += gamma2*bp*bz + gamma*bz*energy;
+  fP_x += gamma2 * bp * bx + gamma * bx * energy;
+  fP_y += gamma2 * bp * by + gamma * by * energy;
+  fP_z += gamma2 * bp * bz + gamma * bz * energy;
 }

@@ -24,3 +24,11 @@
 #BINARY
 
 *.out
+
+# VSCODE FILES
+.vscode/settings.json
+
+# DECAYMENT TEST
+
+test.root
+test_decay.cxx

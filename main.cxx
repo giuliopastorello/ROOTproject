@@ -45,7 +45,7 @@ void generate()
     Particle particella[120];
 
     for (int i = 0; i < 1E5; ++i) {
-        int k = 0;
+        int decaysCounter = 0;
         for (int j = 0; j < 100; ++j){
             double uniform = gRandom->Uniform(0,1);
             if (uniform < 0.4) {
@@ -60,20 +60,27 @@ void generate()
                 particella[j].SetIndex(4);
             } else if (uniform < 0.99) {
                 particella[j].SetIndex(5);
-            } else { 
-                particella[j].SetIndex(6);
-                double uni = gRandom->Uniform(0,1);
-                if (uni < 0.5) {
-                    particella[100 + k].SetIndex(pi_plus); //pi+
-                    particella[100 + k + 1].SetIndex(K_minus); //K-
-                } else {
-                    particella[100 + k].SetIndex(pi_minus); //pi-
-                    particella[100 + k + 1].SetIndex(K_plus); //K+
+            } else {
+                particella[j].SetIndex("k*");
+
+                double randomDecay = gRandom->Uniform(0,1);
+                if (randomDecay < 0.5) // K* -> Pi+ & K-
+                {
+                  particella[100 + decaysCounter].SetIndex("pi+");
+                  particella[100 + decaysCounter + 1].SetIndex("K-");
                 }
-                particella[j].Decay2body(particella[100 + k], particella[100 + k + 1]);
-                h12 -> Fill(particella[100 + k].InvMass(particella[100 + k + 1]));
-                k += 2;
-            }
+                else // K* -> Pi- & K+
+                {
+                  particella[100 + decaysCounter].SetIndex("pi-");
+                  particella[100 + decaysCounter + 1].SetIndex("K+");
+                }
+
+                // Assegno le giuste quantità di moto dopo il decadimento:
+                particella[j].Decay2body(particella[100 + decaysCounter], particella[100 + decaysCounter + 1]);
+                h12->Fill(particella[100 + decaysCounter].InvMass(particella[100 + decaysCounter + 1])); // Invariant Mass - K* Decays
+                decaysCounter += 2;
+            } // fine else k*
+
             h1 -> Fill(particella[j].GetIndex()); 
             double phi = gRandom->Uniform(0, TMath::TwoPi());
             h2 -> Fill(phi);
@@ -85,9 +92,9 @@ void generate()
             h5 -> Fill(sqrt(pow(particella[j].GetPx(), 2) + pow(particella[j].GetPy(), 2)));
             h6 -> Fill(particella[j].GetEnergy());
         } 
-        for (int h = 0;  h < 100 + k; ++h)
+        for (int h = 0;  h < 100 + decaysCounter; ++h)
         {
-          for (int l =  h + 1; l < 100 + k; ++l){
+          for (int l =  h + 1; l < 100 + decaysCounter; ++l){
             h7 -> Fill(particella[h].InvMass(particella[l]));
             if (particella[h].GetCharge() * particella[l].GetCharge() == -1) {
                 h8 -> Fill(particella[h].InvMass(particella[l]));
