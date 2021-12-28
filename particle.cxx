@@ -110,7 +110,7 @@ double Particle::InvMass(Particle &p) const {
 //Decayment into Two "Daughter" Particles
 int Particle::Decay2body(Particle &dau1,Particle &dau2) const {
   if(GetMass() == 0.0){
-    std::cout << "Decayment cannot be preformed if mass is zero" << '\n';
+    printf("Decayment cannot be preformed if mass is zero\n");
     return 1;
   }
   
@@ -140,7 +140,7 @@ int Particle::Decay2body(Particle &dau1,Particle &dau2) const {
   }
 
   if(massMot < massDau1 + massDau2){
-    std::cout << "Decayment cannot be preformed because mass is too low in this channel" << '\n';
+    printf("Decayment cannot be preformed because mass is too low in this channel\n");
     return 2;
   }
   
@@ -164,7 +164,7 @@ int Particle::Decay2body(Particle &dau1,Particle &dau2) const {
 
   return 0;
 }
-//Needed by Decay2Body
+
 void Particle::Boost(double bx, double by, double bz)
 {
 

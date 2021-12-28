@@ -7,12 +7,11 @@
 #include "TFile.h"
 #include "TRandom.h" 
 #include "TMath.h"
-#include "TCanvas.h"
 R__LOAD_LIBRARY(particletype_cxx.so)
 R__LOAD_LIBRARY(resonancetype_cxx.so)
 R__LOAD_LIBRARY(particle_cxx.so)
 
-void test()
+void generate()
 {
     TFile *file = new TFile("histograms.root","RECREATE");
 
@@ -22,7 +21,7 @@ void test()
     Particle::AddParticleType("K-", 0.49367, -1, 0);
     Particle::AddParticleType("p+", 0.93827, 1, 0);
     Particle::AddParticleType("p-", 0.93827, -1, 0);
-    Particle::AddParticleType("k*", 0.89166, 1, 0.050);
+    Particle::AddParticleType("k*", 0.89166, 0, 0.050);
 
     TH1F *h1 = new TH1F ("h1", "Occurencies", 7, 0, 7); 
     TH1F *h2 = new TH1F ("h2", "Azimutal Angle", 100, 0, TMath::TwoPi());
@@ -30,22 +29,23 @@ void test()
     TH1F *h4 = new TH1F ("h4", "Momentum", 1E4, 0, 10);
     TH1F *h5 = new TH1F ("h5", "Transverse Momentum", 1E3, 0, 5);
     TH1F *h6 = new TH1F ("h6", "Energy", 1E3, 0, 6);
-    TH1F *h7 = new TH1F ("h7", "Invariant Mass (General)", 1E3, 0, 2.5); 
-    TH1F *h8 = new TH1F ("h8", "Invariant Mass Opposite Charges", 1E3, 0, 2.5);
-    TH1F *h9 = new TH1F ("h9", "Invariant Mass Same Charges", 1E3, 0, 2.5);
-    TH1F *h10 = new TH1F ("h10", "Invariant Mass pi & k Opposite Charges", 1E3, 0, 2.5);
-    TH1F *h11 = new TH1F ("h11", "Invariant Mass pi & k Same Charges", 1E3, 0, 2.5);
-    TH1F *h12 = new TH1F ("h12", "Invariant Mass Decayment Particles",1E3, 0, 2);
+    TH1F *h7 = new TH1F ("h7", "Invariant Mass (General)", 1E3, 0, 7); 
+    TH1F *h8 = new TH1F ("h8", "Invariant Mass Opposite Charges", 1E3, 0, 7);
+    TH1F *h9 = new TH1F ("h9", "Invariant Mass Same Charges", 1E3, 0, 7);
+    TH1F *h10 = new TH1F ("h10", "Invariant Mass pi & k Opposite Charges", 1E3, 0, 7);
+    TH1F *h11 = new TH1F ("h11", "Invariant Mass pi & k Same Charges", 1E3, 0, 7);
+    TH1F *h12 = new TH1F ("h12", "Invariant Mass Decayment Particles",1E3, 0.4, 1.4);
 
+    //to avoid errors by using "==" operator on char type
     const char* pi_plus = "pi+";
     const char* pi_minus = "pi-";
     const char* K_plus = "K+";
     const char* K_minus = "K-";
 
-    Particle particella[130];
+    Particle particella[120];
 
     for (int i = 0; i < 1E5; ++i) {
-        int k = 100;
+        int k = 0;
         for (int j = 0; j < 100; ++j){
             double uniform = gRandom->Uniform(0,1);
             if (uniform < 0.4) {
@@ -62,17 +62,17 @@ void test()
                 particella[j].SetIndex(5);
             } else { 
                 particella[j].SetIndex(6);
-                particella[j].Decay2body(particella[k], particella[k + 1]);
-                double uni = gRandom->Uniform();
+                double uni = gRandom->Uniform(0,1);
                 if (uni < 0.5) {
-                    particella[k].SetIndex(0); 
-                    particella[k + 1].SetIndex(3);
+                    particella[100 + k].SetIndex(pi_plus); //pi+
+                    particella[100 + k + 1].SetIndex(K_minus); //K-
                 } else {
-                    particella[k].SetIndex(1); 
-                    particella[k + 1].SetIndex(2);
+                    particella[100 + k].SetIndex(pi_minus); //pi-
+                    particella[100 + k + 1].SetIndex(K_plus); //K+
                 }
-                h12 -> Fill(particella[k].InvMass(particella[k + 1]));
-                k += 2; 
+                particella[j].Decay2body(particella[100 + k], particella[100 + k + 1]);
+                h12 -> Fill(particella[100 + k].InvMass(particella[100 + k + 1]));
+                k += 2;
             }
             h1 -> Fill(particella[j].GetIndex()); 
             double phi = gRandom->Uniform(0, TMath::TwoPi());
@@ -85,9 +85,9 @@ void test()
             h5 -> Fill(sqrt(pow(particella[j].GetPx(), 2) + pow(particella[j].GetPy(), 2)));
             h6 -> Fill(particella[j].GetEnergy());
         } 
-        for (int h = 0;  h < k; ++h)
+        for (int h = 0;  h < 100 + k; ++h)
         {
-          for (int l =  h + 1; l < k; ++l){
+          for (int l =  h + 1; l < 100 + k; ++l){
             h7 -> Fill(particella[h].InvMass(particella[l]));
             if (particella[h].GetCharge() * particella[l].GetCharge() == -1) {
                 h8 -> Fill(particella[h].InvMass(particella[l]));
@@ -95,7 +95,7 @@ void test()
             {
                 h9 -> Fill(particella[h].InvMass(particella[l]));
             }
-            if ((particella[h].GetName() == pi_plus && particella[l].GetName() == K_minus) || (particella[h].GetName() == pi_minus && particella[l].GetName() == K_minus)) {
+            if ((particella[h].GetName() == pi_plus && particella[l].GetName() == K_minus) || (particella[h].GetName() == pi_minus && particella[l].GetName() == K_plus)) {
                 h10 -> Fill(particella[h].InvMass(particella[l]));
             } else if ((particella[h].GetName() == pi_plus && particella[l].GetName() == K_plus) || (particella[h].GetName() == pi_minus && particella[l].GetName() == K_minus)) {
                 h11 -> Fill(particella[h].InvMass(particella[l]));
