@@ -30,11 +30,11 @@ void generate()
     TH1F *h5 = new TH1F ("h5", "Transverse Momentum", 1E3, 0, 5);
     TH1F *h6 = new TH1F ("h6", "Energy", 1E3, 0, 6);
     TH1F *h7 = new TH1F ("h7", "Invariant Mass (General)", 1E3, 0, 7); 
-    TH1F *h8 = new TH1F ("h8", "Invariant Mass Opposite Charges", 1E3, 0, 7);
-    TH1F *h9 = new TH1F ("h9", "Invariant Mass Same Charges", 1E3, 0, 7);
-    TH1F *h10 = new TH1F ("h10", "Invariant Mass pi & k Opposite Charges", 1E3, 0, 7);
-    TH1F *h11 = new TH1F ("h11", "Invariant Mass pi & k Same Charges", 1E3, 0, 7);
-    TH1F *h12 = new TH1F ("h12", "Invariant Mass Decayment Particles",1E3, 0.4, 1.4);
+    TH1F *h8 = new TH1F ("h8", "Invariant Mass Opposite Charges", 1E2, 0, 2);
+    TH1F *h9 = new TH1F ("h9", "Invariant Mass Same Charges", 1E2, 0, 2);
+    TH1F *h10 = new TH1F ("h10", "Invariant Mass pi & k Opposite Charges", 1E2, 0, 2);
+    TH1F *h11 = new TH1F ("h11", "Invariant Mass pi & k Same Charges", 1E2, 0, 2);
+    TH1F *h12 = new TH1F ("h12", "Invariant Mass Decayment Particles",1E2, 0, 2);
 
     //to avoid errors by using "==" operator on char type
     const char* pi_plus = "pi+";
