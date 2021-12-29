@@ -5,7 +5,7 @@
 
 class ResonanceType : public ParticleType {
   public:   
-    virtual double GetWidth (); 
+    double GetWidth () const override; 
     void Print () override;
     ResonanceType (const char* , double, int, double);
   private:

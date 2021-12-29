@@ -2,7 +2,7 @@
 #include "particletype.h"
 #include "resonancetype.h"
 
-double ResonanceType::GetWidth () {return fWidth;}
+double ResonanceType::GetWidth () const {return fWidth;}
 void ResonanceType::Print () {
     ParticleType::Print ();
     std::cout << "Width: " << fWidth << '\n'; 

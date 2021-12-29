@@ -8,7 +8,7 @@ class ParticleType {
     double GetMass () const;
     int GetCharge () const;
     virtual void Print ();
-    double GetWidth ();
+    virtual double GetWidth () const;
   private:
     const char* fName;
     const double fMass;
