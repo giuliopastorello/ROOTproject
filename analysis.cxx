@@ -58,23 +58,66 @@ std::cout << "K-) " << h1->GetBinContent(4) / h1->GetEntries() * 100 << '\n';
 std::cout << "p+) " << h1->GetBinContent(5) / h1->GetEntries() * 100 << '\n';
 std::cout << "p-) " << h1->GetBinContent(6) / h1->GetEntries() * 100 << '\n';
 std::cout << "K*) " << h1->GetBinContent(7) / h1->GetEntries() * 100 << '\n';
-
-
+//9.3, 9.4
 TCanvas *firstCanvas = new TCanvas("fit", "Fit Hisograms");
 firstCanvas->Divide (2, 2);
 
 firstCanvas->cd(1);
+h1->Draw();
+
+firstCanvas->cd(2);
 h2->Fit("pol0", "Q");
 h2->Draw("E, SAME");
 
-firstCanvas->cd(2);
+firstCanvas->cd(3);
 h3->Fit("pol0", "Q");
 h3->Draw("E, SAME");
 
-firstCanvas->cd(3);
+firstCanvas->cd(4);
 h4->Fit("expo", "Q");
 h4->Draw("E, SAME");
+//10
+TCanvas *secondCanvas = new TCanvas("invariant mas", "Fit InvMass Hisograms");
+secondCanvas->Divide (1, 3);
 
+secondCanvas->cd(1);
+h12->Draw();
+
+secondCanvas->cd(2);
+TH1F *h21(h8);
+h21->SetTitle("InvMass: Opposite-Same Charges, All Particles");
+h21->Add(h8, h9, 1, -1);
+h21->Fit("gaus", "Q");
+h21->Draw();
+
+secondCanvas->cd(3);
+TH1F *h43(h10);
+h43->SetTitle("InvMass: Opposite-Same Charges, pi & k");
+h43->Add(h10, h11, 1, -1);
+h43->Fit("gaus", "Q");
+h43->Draw();
+
+/* 3 - 4
+diffCanvas->cd(1);
+TH1F *diffKP(mass3Histo);
+diffKP->SetTitle("SOTTRAZIONE P & K CONCORDI E DISCORDI");
+diffKP->SetName("DiffKP");
+// std::cout << "ERORRE MEDIA DIFFKP" << diffKP->GetMeanError() << '\n';
+diffKP->Add(mass3Histo, mass4Histo, 1, -1);
+diffKP->Fit("gaus", "Q");
+diffKP->Draw();
+// histo 5
+diffCanvas->cd(2);
+// mass5Histo->Fit("gaus", "Q");
+mass5Histo->Draw();
+// 1 - 2
+diffCanvas->cd(3);
+TH1F *diffAll(mass2Histo);
+diffAll->SetTitle("SOTTRAZIONE TUTTE PARTICELLE CONCORDI E DISCORDI");
+diffAll->SetName("DiffAll");
+diffAll->Add(mass1Histo, mass2Histo, 1, -1);
+diffAll->Draw();
+*/
 }
 
 
