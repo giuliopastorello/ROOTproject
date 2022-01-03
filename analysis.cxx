@@ -96,28 +96,6 @@ h43->SetTitle("InvMass: Opposite-Same Charges, pi & k");
 h43->Add(h10, h11, 1, -1);
 h43->Fit("gaus", "Q");
 h43->Draw();
-
-/* 3 - 4
-diffCanvas->cd(1);
-TH1F *diffKP(mass3Histo);
-diffKP->SetTitle("SOTTRAZIONE P & K CONCORDI E DISCORDI");
-diffKP->SetName("DiffKP");
-// std::cout << "ERORRE MEDIA DIFFKP" << diffKP->GetMeanError() << '\n';
-diffKP->Add(mass3Histo, mass4Histo, 1, -1);
-diffKP->Fit("gaus", "Q");
-diffKP->Draw();
-// histo 5
-diffCanvas->cd(2);
-// mass5Histo->Fit("gaus", "Q");
-mass5Histo->Draw();
-// 1 - 2
-diffCanvas->cd(3);
-TH1F *diffAll(mass2Histo);
-diffAll->SetTitle("SOTTRAZIONE TUTTE PARTICELLE CONCORDI E DISCORDI");
-diffAll->SetName("DiffAll");
-diffAll->Add(mass1Histo, mass2Histo, 1, -1);
-diffAll->Draw();
-*/
 }
 
 
